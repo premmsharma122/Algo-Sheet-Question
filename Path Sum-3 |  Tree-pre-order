@@ -36,6 +36,50 @@ class Solution {
         return currPath + leftPath + rightPath;
     }
 }
+// 2nd Approach by an arraylist->
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */import java.util.ArrayList;
+import java.util.List;
+
+class Solution {
+    int c = 0;
+
+    public void help(TreeNode r, long t, List<Long> arr) {
+        if (r == null) return;
+
+        arr.add((long) r.val);
+        long sum = 0;
+
+        for (int i = arr.size() - 1; i >= 0; i--) {
+            sum += arr.get(i);
+            if (sum == t) c++;
+        }
+
+        help(r.left, t, arr);
+        help(r.right, t, arr);
+        arr.remove(arr.size() - 1);
+    }
+
+    public int pathSum(TreeNode root, int targetSum) {
+        c = 0;
+        List<Long> arr = new ArrayList<>();
+        help(root, targetSum, arr);
+        return c;
+    }
+}
 
 
 
