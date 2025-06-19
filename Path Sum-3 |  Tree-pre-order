@@ -1,0 +1,42 @@
+// facing Difficulty to solve this question it take a extra self main function call which leads me to face errors.
+// Ist Approach
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public int pSum(TreeNode r, int t, long sum){
+        if(r==null) return 0;
+        sum+=r.val;
+        int count=0;
+         if(sum==t) {
+            count++;
+        }
+        count+= pSum(r.left, t, sum);
+        count+= pSum(r.right, t, sum);
+        return count;
+        
+    }
+    public int pathSum(TreeNode root, int targetSum) {
+        if(root == null) return 0;
+        int currPath = pSum(root, targetSum,0);
+        int leftPath = pathSum(root.left, targetSum);
+        int rightPath = pathSum(root.right, targetSum);
+        return currPath + leftPath + rightPath;
+    }
+}
+
+
+
+
