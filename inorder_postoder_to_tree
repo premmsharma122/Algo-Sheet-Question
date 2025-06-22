@@ -1,0 +1,35 @@
+// Find out imp pattern that is traversal in post and pre order array(two different question just minmal changes).
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public TreeNode constTree(int inor[], int post[], int postIdx, int st, int end){
+        if(st > end) return null;
+
+        TreeNode root = new TreeNode(post[postIdx]);
+        int idx = st;
+        while(inor[idx] != post[postIdx]){
+            idx++;
+        }
+        int rightTreeSize = end - idx;
+        root.right = constTree(inor, post, postIdx-1, idx+1, end);
+        root.left = constTree(inor, post, postIdx - rightTreeSize -1, st, idx-1);
+        return root;
+    }
+    public TreeNode buildTree(int[] inorder, int[] postorder) {
+       return constTree(inorder, postorder, postorder.length-1, 0, inorder.length-1);
+
+    }
+}
