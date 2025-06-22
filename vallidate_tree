@@ -1,0 +1,56 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+//  // very close to solve it in one run but stuck at [2,2,2] testcase set:
+// class Solution {
+//     public boolean validLeft(TreeNode r1){
+//         if(r1 == null) return true;
+
+//         if(r1.left != null && r1.left.val > r1.val){
+//             if(r1.val != r1.left.val){
+//                 return false;
+//             }
+//         }
+//         return true;
+        
+//     }
+//     public boolean validRight(TreeNode r2){
+//         if(r2 == null) return true;
+//         if(r2.right != null && r2.right.val < r2.val ){
+//             if(r2.val != r2.right.val){
+//                 return false;
+//             }
+//         }
+//         return true;
+//     }
+//     public boolean isValidBST(TreeNode root) {
+//         return validLeft(root) && validRight(root);
+//     }
+// }
+// now valid ->
+class Solution {
+    public boolean isValidBST(TreeNode root) {
+        return isValid(root, Long.MIN_VALUE, Long.MAX_VALUE);
+    }
+
+    public boolean isValid(TreeNode node, long min, long max) {
+        if (node == null) return true;
+
+        if (node.val <= min || node.val >= max) return false;
+
+        return isValid(node.left, min, node.val) &&
+               isValid(node.right, node.val, max);
+    }
+}
