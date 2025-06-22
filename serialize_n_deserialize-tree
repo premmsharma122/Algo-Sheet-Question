@@ -1,0 +1,55 @@
+// Listed in Leetcode HARD easy question just traversal of tree by a string data and then create a tree by that string data -> serialize and Deserialize 
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+public class Codec {
+
+    // Encodes a tree to a single string.
+    public String serialize(TreeNode root) {
+        List<String> str = new ArrayList<>();
+        buildStr(root, str);
+        return String.join(",",str);
+    }
+    public void buildStr(TreeNode root, List<String> str ){
+        if(root == null){
+            str.add("N");
+        }else{
+            str.add(String.valueOf(root.val));
+            buildStr(root.left, str);
+            buildStr(root.right, str);
+        }
+    }
+
+    // Decodes your encoded data to tree.
+    public TreeNode deserialize(String data) {
+        String nodeVal[] = data.split(",");
+        index =0;
+        return buildTree(nodeVal);
+        
+    }
+    private int index=0;
+    public TreeNode buildTree(String[] data){
+        if(data[index].equals("N")){
+            index++;
+            return null;
+
+        }
+
+        TreeNode root = new TreeNode(Integer.parseInt(data[index]));
+        index++;
+        root.left = buildTree(data);
+        root.right = buildTree(data);
+        return root;
+    }
+}
+
+// Your Codec object will be instantiated and called as such:
+// Codec ser = new Codec();
+// Codec deser = new Codec();
+// TreeNode ans = deser.deserialize(ser.serialize(root));
