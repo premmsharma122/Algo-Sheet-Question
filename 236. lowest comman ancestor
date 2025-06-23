@@ -1,0 +1,33 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public boolean pathFind(TreeNode r, TreeNode n , List<TreeNode> path){
+        if(r==null) return false;
+        path.add(r);
+        if(r.val == n.val) return true;
+        boolean leftPath = pathFind(r.left,n,path);
+        boolean rightPath = pathFind(r.right,n,path);
+        if(leftPath || rightPath) return true;
+        path.remove(path.size()-1);
+        return false;
+    }
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        List<TreeNode> path1 = new ArrayList<>();
+        List<TreeNode> path2 = new ArrayList<>();
+        pathFind(root,p,path1);
+        pathFind(root,q,path2);
+        int i=0;
+        for(;i<path1.size() && i<path2.size(); i++ ){
+            if(path1.get(i) != path2.get(i)) break;
+        }
+        return path1.get(i-1);
+        
+    }
+}
