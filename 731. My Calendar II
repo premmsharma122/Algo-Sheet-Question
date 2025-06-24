@@ -1,0 +1,29 @@
+class MyCalendarTwo {
+    private List<int[]> overlap;
+    private List<int[]> booking;
+    public MyCalendarTwo() {
+        overlap = new ArrayList<>();
+        booking = new ArrayList<>();
+    }
+    
+    public boolean book(int startTime, int endTime) {
+        for(int[] x : overlap){
+            if(startTime < x[1] && endTime > x[0]){
+                return false;
+            }
+        }
+        for(int[] y : booking){
+            if(startTime < y[1] && endTime > y[0]){
+                overlap.add(new int[]{Math.max(startTime, y[0]), Math.min(endTime,y[1])});
+            }
+        }
+        booking.add(new int[]{startTime, endTime});
+        return true;
+    }
+}
+
+/**
+ * Your MyCalendarTwo object will be instantiated and called as such:
+ * MyCalendarTwo obj = new MyCalendarTwo();
+ * boolean param_1 = obj.book(startTime,endTime);
+ */
