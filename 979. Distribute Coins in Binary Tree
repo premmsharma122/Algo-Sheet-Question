@@ -1,0 +1,39 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    private int c=0;
+    public int count(TreeNode r){
+        // if(r==null) return;
+        // c++;
+        // count(r.left);
+        // count(r.right);
+        if(r==null) return 0;
+        int left = count(r.left);
+        int right = count(r.right);
+
+        c+= Math.abs(left) + Math.abs(right);
+        return r.val + left + right -1;
+    }
+    public int distributeCoins(TreeNode root) {
+        // if(root == null) return 0;
+        // if(root.val != 0){
+        //     count(root);
+        //     return c-1;
+       
+        int ans = count(root);
+        return c;
+    }
+}
