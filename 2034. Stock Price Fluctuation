@@ -1,0 +1,41 @@
+class StockPrice {
+    private Map<Integer, Integer> timestampToPrice;
+    private TreeMap<Integer, Integer> priceFreq;
+    private int latestTimestamp;
+
+    public StockPrice() {
+        timestampToPrice = new HashMap<>();
+        priceFreq = new TreeMap<>();  // Keys are prices, values are their frequencies
+        latestTimestamp = 0;
+    }
+
+    public void update(int timestamp, int price) {
+        if (timestampToPrice.containsKey(timestamp)) {
+            int oldPrice = timestampToPrice.get(timestamp);
+            // Decrease frequency of old price
+            priceFreq.put(oldPrice, priceFreq.get(oldPrice) - 1);
+            if (priceFreq.get(oldPrice) == 0) {
+                priceFreq.remove(oldPrice);
+            }
+        }
+
+        // Set new price
+        timestampToPrice.put(timestamp, price);
+        priceFreq.put(price, priceFreq.getOrDefault(price, 0) + 1);
+
+        // Update latest timestamp
+        latestTimestamp = Math.max(latestTimestamp, timestamp);
+    }
+
+    public int current() {
+        return timestampToPrice.get(latestTimestamp);
+    }
+
+    public int maximum() {
+        return priceFreq.lastKey();  // max key in TreeMap
+    }
+
+    public int minimum() {
+        return priceFreq.firstKey(); // min key in TreeMap
+    }
+}
