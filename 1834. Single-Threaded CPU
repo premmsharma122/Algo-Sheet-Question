@@ -1,0 +1,41 @@
+class Solution {
+    public int[] getOrder(int[][] tasks) {
+        int n = tasks.length;
+        
+        // Add task index to each task: [enqueueTime, processingTime, index]
+        int[][] sortedTasks = new int[n][];
+        for (int i = 0; i < n; i++) {
+            sortedTasks[i] = new int[] {tasks[i][0], tasks[i][1], i};
+        }
+
+        // Sort tasks by enqueueTime
+        Arrays.sort(sortedTasks, (a, b) -> Integer.compare(a[0], b[0]));
+
+        // Min-heap: sort by processingTime, then by index
+        PriorityQueue<int[]> availableTasks = new PriorityQueue<>((a, b) ->
+            a[1] != b[1] ? a[1] - b[1] : a[2] - b[2]);
+
+        int[] result = new int[n];
+        int resIndex = 0, taskIndex = 0;
+        long time = 0;
+
+        while (resIndex < n) {
+            // Add all tasks that are available at current time
+            while (taskIndex < n && sortedTasks[taskIndex][0] <= time) {
+                availableTasks.offer(sortedTasks[taskIndex++]);
+            }
+
+            if (availableTasks.isEmpty()) {
+                // If no tasks are available, jump to next task's enqueue time
+                time = sortedTasks[taskIndex][0];
+                continue;
+            }
+
+            int[] current = availableTasks.poll();
+            result[resIndex++] = current[2];
+            time += current[1];
+        }
+
+        return result;
+    }
+}
