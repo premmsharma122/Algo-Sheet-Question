@@ -1,0 +1,40 @@
+class Solution {
+    class Pair {
+        int profit;
+        int capital;
+
+        public Pair(int profit, int capital) {
+            this.profit = profit;
+            this.capital = capital;
+        }
+    }
+// Do half by self and stuck at end so helped by solution.
+    public int findMaximizedCapital(int k, int w, int[] profits, int[] capital) {
+        // Min heap to get the cheapest capital requirement first
+        PriorityQueue<Pair> capitalPQ = new PriorityQueue<>((a, b) -> a.capital - b.capital);
+
+        // Max heap to get the most profitable project among affordable ones
+        PriorityQueue<Pair> profitPQ = new PriorityQueue<>((a, b) -> b.profit - a.profit);
+
+        // Add all projects to capitalPQ
+        for (int i = 0; i < profits.length; i++) {
+            capitalPQ.add(new Pair(profits[i], capital[i]));
+        }
+
+        // Try to pick up to k projects
+        for (int i = 0; i < k; i++) {
+            // Move all affordable projects into profitPQ
+            while (!capitalPQ.isEmpty() && capitalPQ.peek().capital <= w) {
+                profitPQ.add(capitalPQ.poll());
+            }
+
+            // No projects can be done
+            if (profitPQ.isEmpty()) break;
+
+            // Do the most profitable project
+            w += profitPQ.poll().profit;
+        }
+
+        return w;
+    }
+}
