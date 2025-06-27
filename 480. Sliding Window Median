@@ -1,0 +1,123 @@
+//   >>>>>>>>>>> Do it by self but 43/44 passed (TLE) so optimize it by hashmap bcoz heap take o(n) to remove.
+// class Solution {
+//     public double[] medianSlidingWindow(int[] nums, int k) {
+//         PriorityQueue<Integer> small = new PriorityQueue<>(Collections.reverseOrder()); // max heap
+//         PriorityQueue<Integer> large = new PriorityQueue<>();
+//         List<Double> res = new ArrayList<>();
+//         //step 1 : add in small and large and balance them
+//         for(int i=0; i<nums.length; i++){
+//             small.add(nums[i]);
+//             large.add(small.poll());
+//             if(small.size() < large.size()){
+//                 small.add(large.poll());
+//             }
+//             //step 2 : check window and add median
+//             if(i>=k-1){
+//                 if(small.size() > large.size()){
+//                     res.add((double)small.peek());
+//                 }else{
+//                     res.add(((double)large.peek() + (double)small.peek())/2.0);
+//                 }
+
+//                 int numRemove = nums[i-k+1];
+//                 if(!small.remove(numRemove)){// if gave false then check in large
+//                     large.remove(numRemove);
+//                 }
+//                  // Step 3: Rebalance again after removal
+//                 while (small.size() < large.size()) {
+//                     small.add(large.poll());
+//                 }
+//                 while (small.size() > large.size() + 1) {
+//                     large.add(small.poll());
+//                 }
+
+//             }
+//         }
+//         double[] ans = new double[res.size()];
+//         for(int i=0; i<res.size(); i++){
+//             ans[i] = res.get(i);
+//         }
+//         return ans;
+//     }
+// }
+class Solution {
+    private PriorityQueue<Integer> lo;
+    private PriorityQueue<Integer> hi;
+    private int loSize = 0;
+    private int hiSize = 0;
+    private HashMap<Integer, Integer> delayed;
+    public double[] medianSlidingWindow(int[] nums, int k) {
+        double[] result = new double[nums.length - k + 1];
+        lo = new PriorityQueue<>(Collections.reverseOrder());
+        hi = new PriorityQueue<>();
+        delayed = new HashMap<>();
+        for (int i = 0; i < k; i++) {
+            insert(nums[i]);
+        }
+        balance();
+        result[0] = getMedian(k);
+        for (int i = k; i < nums.length; i++) {
+            int removeNum = nums[i - k];
+            insert(nums[i]);
+            remove(removeNum);
+            balance();
+            result[i-k+1] = getMedian(k);
+        }
+        return result;
+    }
+    private void insert(int num) {
+        if(lo.isEmpty() || num <= lo.peek()){
+            lo.offer(num);
+            loSize++;
+        } else {
+            hi.offer(num);
+            hiSize++;
+        }
+    }
+    private void remove(int num) {
+        delayed.put(num, delayed.getOrDefault(num, 0) + 1);
+        if (num <= lo.peek()) {
+            loSize--;
+            if(num == lo.peek()){
+                prune(lo);
+            }
+        } else {
+            hiSize--;
+            if(num == hi.peek()){
+                prune(hi);
+            }
+        }
+    }
+    private void balance() {
+        while (loSize > hiSize + 1) {
+            hi.offer(lo.poll());
+            loSize--;
+            hiSize++;
+            prune(lo);
+        }
+        while (loSize < hiSize) {
+            lo.offer(hi.poll());
+            loSize++;
+            hiSize--;
+            prune(hi);
+        }
+    }
+    private void prune(PriorityQueue<Integer> q){
+        while(!q.isEmpty() && delayed.containsKey(q.peek())){
+            int top = q.peek();
+            delayed.put(top, delayed.get(top) - 1);
+            if(delayed.get(top) == 0) 
+            delayed.remove(top);
+            q.poll();
+        }
+    }
+    private double getMedian(int k) {
+        double topLo = lo.peek();
+        double topHi;
+        if (k % 2 != 0) {
+            return topLo;
+        }
+        topHi = hi.peek();
+        return (topLo + topHi) / 2.0;
+    }
+}
