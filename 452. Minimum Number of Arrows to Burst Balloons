@@ -1,0 +1,26 @@
+import java.util.*;
+
+class Solution {
+    public int findMinArrowShots(int[][] points) {
+        if (points.length == 0) return 0;
+
+        Arrays.sort(points, (a, b) -> Integer.compare(a[0], b[0]));
+
+        int arrows = 1;
+        int[] curr = points[0];
+
+        for (int i = 1; i < points.length; i++) {
+         
+            if (points[i][0] <= curr[1]) {
+                
+                curr[1] = Math.min(curr[1], points[i][1]);
+            } else {
+               
+                arrows++;
+                curr = points[i];
+            }
+        }
+
+        return arrows;
+    }
+}
