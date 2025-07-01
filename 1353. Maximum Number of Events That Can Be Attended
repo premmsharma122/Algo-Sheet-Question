@@ -1,0 +1,46 @@
+// import java.util.Arrays;
+
+// class Solution {
+//     public int maxEvents(int[][] events) {
+//         Arrays.sort(events, (a, b) -> {
+//             if (a[0] != b[0]) return a[0] - b[0]; 
+//             return a[1] - b[1];                   
+//         });
+
+//         boolean[] used = new boolean[100001]; 
+//         int count = 0;
+
+//         for (int[] event : events) {
+//             for (int d = event[0]; d <= event[1]; d++) { 
+//                 if (!used[d]) {
+//                     used[d] = true; 
+//                     count++;
+//                     break; 
+//                 }
+//             }
+//         }
+
+//         return count;
+//     }
+// }
+class Solution {
+    int[] parent = new int[100002]; 
+    private int find(int day) {
+        if (parent[day] == 0) return day;
+        return parent[day] = find(parent[day]);
+    }
+
+    public int maxEvents(int[][] events) {
+        Arrays.sort(events, (a, b) -> a[1] - b[1]); 
+        int count = 0;
+
+        for (int[] event : events) {
+            int availableDay = find(event[0]); 
+            if (availableDay <= event[1]) {
+                count++;
+                parent[availableDay] = availableDay + 1; 
+            }
+        }
+        return count;
+    }
+}
