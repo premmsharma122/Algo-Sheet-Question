@@ -1,0 +1,60 @@
+// class Solution {
+//     //>>>> Do it by self , logic is correct but TLE <<<<<<
+//     public char kthCharacter(long k, int[] operations) {
+//         String word ="a";
+//         int j=0;
+//         while(j<operations.length){
+//             if(operations[j] == 0){
+//                 word += word;
+//             }else if(operations[j] == 1){
+//                 StringBuilder add = new StringBuilder();
+//                 for(int i=0; i<word.length(); i++){
+//                     char curr = word.charAt(i);
+//                     char next = (curr == 'z') ? 'a' : (char)(curr+1);
+//                     add.append(next);
+//                 }
+//                 word += add.toString();
+//             }
+//             j++;
+//         }
+//         return word.charAt((int)k-1);
+//     }
+// }
+
+//          >>> Optimized from solution <<<<
+class Solution {
+    public char kthCharacter(long k, int[] operations) {
+        List<Long> lengths = new ArrayList<>();
+        List<Integer> ops = new ArrayList<>();
+
+        long len = 1; // Initial length: "a"
+        for (int op : operations) {
+            len *= 2;
+            ops.add(op);
+            lengths.add(len);
+            if (len >= k) break;
+        }
+
+        int shift = 0;  // Total +1 shifts to apply
+        long pos = k;
+
+        for (int i = lengths.size() - 1; i >= 0; i--) {
+            long half = lengths.get(i) / 2;
+
+            if (pos > half) {
+                pos -= half;
+
+                // If it's a transformation operation (op == 1), track the shift
+                if (ops.get(i) == 1) {
+                    shift++;
+                }
+            }
+            // else: we're still in the first half; no change
+        }
+
+        // Original character is always 'a' (from original string)
+        // Apply the shift (mod 26 to wrap around)
+        char result = (char) ('a' + (shift % 26));
+        return result;
+    }
+}
