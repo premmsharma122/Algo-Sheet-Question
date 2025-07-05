@@ -1,0 +1,41 @@
+class TimeMap {
+    public class Element{
+        String k;
+        String v;
+        int timeS;
+        public Element(String k, String v, int timeS){
+            this.k = k;
+            this.v = v;
+            this.timeS = timeS;
+        }
+    }
+    Stack<Element> set;
+    
+    int last_stamp = 0;
+    public TimeMap() {
+        set = new Stack<>();
+        
+    }
+    
+    public void set(String key, String value, int timestamp) {
+        set.push(new Element(key,value,timestamp));
+        last_stamp = timestamp;
+    }
+    
+    public String get(String key, int timestamp) {
+        for(int i=set.size()-1; i>=0; i--){
+            Element e = set.get(i);
+            if(e.k.equals(key) && e.timeS <= timestamp){
+                return e.v;
+            }
+        }
+        return "";
+    }
+}
+
+/**
+ * Your TimeMap object will be instantiated and called as such:
+ * TimeMap obj = new TimeMap();
+ * obj.set(key,value,timestamp);
+ * String param_2 = obj.get(key,timestamp);
+ */
