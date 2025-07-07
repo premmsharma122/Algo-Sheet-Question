@@ -1,0 +1,52 @@
+class FreqStack {
+    public class Pair{
+        int num;
+        int idx;
+        Pair(int n, int idx){
+            this.num = n;
+            this.idx = idx;
+        }
+    }
+    HashMap<Integer, Integer>  hm = new HashMap<>(); 
+    ArrayList<Pair> arr = new ArrayList<>();
+
+    public FreqStack() {
+        hm = new HashMap<>();
+        arr = new ArrayList<>();
+    }
+    
+    public void push(int val) {
+        arr.add(new Pair(val,arr.size()));
+        hm.put(val, hm.getOrDefault(val,0)+1);
+    }
+    
+    public int pop() {
+        int max = 0;
+        for(int n : hm.values()){
+          max = Math.max(max, n);
+        }
+
+        for(int i=arr.size()-1; i>=0; i--){
+            Pair p = arr.get(i);
+            if(hm.get(p.num) == max){
+                arr.remove(i);
+                hm.put(p.num, hm.get(p.num)-1);
+
+                if(hm.get(p.num) == 0){
+                    hm.remove(p.num);
+                }
+                return p.num;
+            }
+        }
+        return -1;
+
+        
+    }
+}
+
+/**
+ * Your FreqStack object will be instantiated and called as such:
+ * FreqStack obj = new FreqStack();
+ * obj.push(val);
+ * int param_2 = obj.pop();
+ */
