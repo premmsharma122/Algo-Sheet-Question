@@ -1,0 +1,37 @@
+import java.util.*;
+
+class Solution {
+    public double mincostToHireWorkers(int[] quality, int[] wage, int k) {
+        int n = quality.length;
+        double[][] work = new double[n][2];
+
+        for (int i = 0; i < n; i++) {
+            work[i][0] = (double) wage[i] / quality[i];
+            work[i][1] = quality[i];
+        }
+
+        Arrays.sort(work, (a, b) -> Double.compare(a[0], b[0]));
+
+        PriorityQueue<Long> maxHeap = new PriorityQueue<>(Collections.reverseOrder());
+        long qSum = 0;
+        double minCost = Double.MAX_VALUE;
+
+        for (double[] w : work) {
+            long q = (long) w[1];
+            double ratio = w[0];
+
+            maxHeap.add(q);
+            qSum += q;
+
+            if (maxHeap.size() > k) {
+                qSum -= maxHeap.poll();
+            }
+
+            if (maxHeap.size() == k) {
+                minCost = Math.min(minCost, qSum * ratio);
+            }
+        }
+
+        return minCost;
+    }
+}
