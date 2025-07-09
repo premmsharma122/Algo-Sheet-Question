@@ -1,0 +1,21 @@
+class Solution {
+    public static int dfs(List<List<Integer>> tree, int informTime[], int id){
+        int max =0;
+        for(int s : tree.get(id)){
+            max = Math.max(max, dfs(tree, informTime,s));
+        }
+        return informTime[id] + max;
+    }
+    public int numOfMinutes(int n, int headID, int[] manager, int[] informTime) {
+        List<List<Integer>> tree = new ArrayList<>();
+        for(int i=0; i<n; i++){
+            tree.add(new ArrayList<>());
+        }
+        for(int i=0; i<n; i++){
+            if(manager[i] != -1){
+                tree.get(manager[i]).add(i); 
+            }
+        }
+        return dfs(tree, informTime, headID);
+    }
+}
