@@ -1,0 +1,64 @@
+class Solution {
+    // private int mint = 0;
+    // public void help(int grid[][], int r, int c, boolean[][] seen){
+    //     if(seen[r][c]==true || r<0 || r>=grid.length || c<0 || c>=grid.length || grid[r][c]==1 || grid[r][c] ==0) return;
+    //     seen[r][c] =true;
+    //     grid[r][c] = 2;
+    //     mint++;
+    //     help(grid, r+1,c,seen );
+    //     help(grid, r,c+1,seen );
+    //     help(grid, r-1,c,seen );
+    //     help(grid, r,c-1,seen );
+
+    
+    public int orangesRotting(int[][] grid) {
+        // int n = grid.length;
+        // boolean seen[][] = new boolean[n][n];
+        // for(int i=0; i<n; i++){
+        //     for(int j=0; j<n; j++){
+        //         if(grid[i][j]==2){
+        //             help(grid, i, j, seen);
+        //         }
+        //     }
+        // }
+
+        // return mint;
+        int n = grid.length; // row
+        int m = grid[0].length; // col
+        int fresh = 0;
+        Queue<int[]> q = new LinkedList<>();
+        for(int i=0; i<n; i++){
+            for(int j=0; j<m; j++){
+                if(grid[i][j] == 2){
+                    q.offer(new int[]{i,j});
+                }else if(grid[i][j] ==1){
+                    fresh++;
+                }
+            }
+        }
+        if(fresh == 0) return 0;
+        int minut =-1;
+
+        int[][] direct = {{1,0},{-1,0},{0,1},{0,-1}};
+
+        while(!q.isEmpty()){
+            int size = q.size();
+            minut++;
+            
+            for(int i=0; i<size; i++){
+                int point[] = q.poll();
+                for(int dir[] : direct){
+                    int x = point[0] + dir[0];
+                    int y = point[1] + dir[1];
+                    if(x>=0 && y>=0 && x<n && y<m && grid[x][y]==1){
+                        grid[x][y] = 2;
+                        fresh--;
+                        q.offer(new int[]{x,y});
+                    }
+                }
+            }
+           
+        }
+         return fresh ==0 ? minut : -1;
+    }
+}
