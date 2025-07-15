@@ -1,0 +1,42 @@
+class Solution {
+    public List<String> help(String s){
+        List<String> arr = new ArrayList<>();
+        for(int i=0; i<4; i++){
+            char c[] = s.toCharArray();
+            char real = c[i];
+
+            c[i] = real == '9' ? '0' : (char)( real+1);
+            arr.add(new String(c));
+
+            c[i] = real == '0' ? '9' : (char) (real -1);
+            arr.add(new String(c));
+        }
+        return arr;
+    }
+    public int openLock(String[] deadends, String target) {
+        Set<String> dead = new HashSet<>(Arrays.asList(deadends));
+        Queue<String> q = new LinkedList<>();
+        Set<String> seen = new HashSet<>();
+        if(dead.contains("0000")) return -1;
+        if(target.equals("0000")) return 0;
+        q.offer("0000");
+        seen.add("0000");
+        int c=0;
+        while(!q.isEmpty()){
+            int size = q.size();
+            while(size-->0){
+                String curr = q.poll();
+                if(curr.equals(target)) return c;
+
+                for(String ng : help(curr)){
+                    if(!seen.contains(ng) && !dead.contains(ng)){
+                        q.offer(ng);
+                        seen.add(ng);
+                    }
+                }
+            }
+            c++;
+        }
+        return -1;
+    }
+}
