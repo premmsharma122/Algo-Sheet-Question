@@ -1,0 +1,35 @@
+class Solution {
+    public static int help(int[] p1, int p2[]){
+        return Math.abs(p1[0]- p2[0]) + Math.abs(p1[1] - p2[1]);
+    }
+    public int minCostConnectPoints(int[][] points) {
+        //>>>> Help from Solution <<<<<<
+        int n = points.length;
+        boolean seen[] = new boolean[n];
+        HashMap<Integer, Integer> hm = new HashMap<>();
+        PriorityQueue<int[]> pq = new PriorityQueue<>((a,b)-> Integer.compare(a[0], b[0]));
+        pq.add(new int[]{0,0});
+        hm.put(0,0);
+        int ans=0;
+
+        while(!pq.isEmpty()){
+            int top[] = pq.poll();
+            int w = top[0], u = top[1];
+            if(seen[u] || hm.getOrDefault(u, Integer.MAX_VALUE)<w) continue;
+
+            seen[u] = true;
+            ans += w;
+
+            for(int v=0; v<n; ++v){
+                if(!seen[v]){
+                    int nDist = help(points[u], points[v]);
+                    if(nDist < hm.getOrDefault(v, Integer.MAX_VALUE)){
+                        hm.put(v, nDist);
+                        pq.add(new int[]{nDist, v});
+                    }
+                }
+            }
+        }
+        return ans;
+    }
+}
