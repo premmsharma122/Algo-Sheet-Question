@@ -1,0 +1,50 @@
+class Solution {
+    public int networkDelayTime(int[][] times, int n, int k) {
+        // Queue<int[]> q = new LinkedList<>();
+        // for(int arr[] : times){
+        //     int a = arr[0];
+        //     if(a==k) q.add(arr);
+        //     break;
+        // }
+        // int finalC =0;
+        // while(!q.isEmpty()){
+        //     int num[] = q.poll();
+        //     int u = num[0], d = num[1], c = num[2];
+        //     if(d==k) return c;
+        //     for(int i=0; i<times.length; i++){
+        //         int rcost = 0;
+
+        //     }
+        // }
+        HashMap<Integer, List<int[]>> g = new HashMap<>();
+        for(int t[] : times){
+            int u =t[0], v=t[1], w = t[2];
+            g.computeIfAbsent(u, x->new ArrayList<>()).add(new int[]{v,w});
+        }
+        PriorityQueue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(a->a[1]));
+        int dist[] = new int[n+1];
+        Arrays.fill(dist, Integer.MAX_VALUE);
+
+        dist[k] = 0;
+        pq.add(new int[]{k,0});
+        while(!pq.isEmpty()){
+            int curr[] = pq.poll();
+            int u =curr[0] , time =curr[1];
+            if(!g.containsKey(u)) continue;
+
+            for(int neig[] : g.get(u)){
+                int ng =neig[0], w = neig[1];
+                if(dist[ng] > time + w){
+                    dist[ng] = time + w;
+                    pq.add(new int[]{ng, dist[ng]});
+                }
+            }
+        }
+        int mt =0;
+        for(int i=1; i<dist.length; i++){
+            if(dist[i]==Integer.MAX_VALUE) return -1;
+            mt = Math.max(mt, dist[i]);
+        }
+        return mt;
+    }
+}
