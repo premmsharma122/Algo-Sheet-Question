@@ -1,0 +1,20 @@
+class Solution {
+    public int help(int arr[], int idx, int end,int dp[]){
+        if(idx > end) return 0;
+        if(dp[idx]!= -1) return dp[idx];
+        dp[idx] = Math.max(arr[idx] + help(arr,idx+2,end,dp),help(arr,idx+1, end,dp));
+        return dp[idx];
+    }
+    public int rob(int[] nums) {
+        if(nums.length == 1) return nums[0];
+        int dp1[] = new int[nums.length];
+        Arrays.fill(dp1,-1);
+
+        int ans1=0, ans2 =0;
+        ans1 = help(nums,0,nums.length-2,dp1);
+        int dp2[] = new int[nums.length];
+        Arrays.fill(dp2,-1);
+        ans2 = help(nums,1,nums.length-1,dp2);
+        return Math.max(ans1, ans2);
+    }
+}
