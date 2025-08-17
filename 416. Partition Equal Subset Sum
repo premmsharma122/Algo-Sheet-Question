@@ -1,0 +1,21 @@
+class Solution {
+    public boolean help(int arr[], int trg, int idx, Boolean dp[][]){
+        if(idx >= arr.length || trg < 0) return false;;
+        if(trg==0) return true;
+        if(dp[idx][trg] != null) return dp[idx][trg];
+        return dp[idx][trg] =  help(arr,trg-arr[idx], idx+1,dp) || help(arr,trg,idx+1, dp);
+       
+    }
+    public boolean canPartition(int[] nums) {
+        int sum=0;
+        
+        for(int i=0; i<nums.length; i++){
+            sum+= nums[i];
+        }
+         if(sum % 2 != 0) return false;
+        int trg = sum/2;
+        Boolean dp[][] = new Boolean[nums.length+1][trg+1];
+        
+        return help(nums,trg,0, dp);
+    }
+}
