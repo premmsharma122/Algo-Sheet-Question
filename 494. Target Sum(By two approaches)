@@ -1,0 +1,49 @@
+>>>>>>>>>>>>>>>>>>>> By Recusrion <<<<<<<<<<<<<<<<
+class Solution {
+    public int c=0;
+    public void help(int arr[], int trg, int idx, int curr){
+        if(idx == arr.length) {
+            if(curr == trg) c++;
+            return;
+        }
+        help(arr, trg, idx+1, curr+arr[idx]);
+        help(arr, trg, idx+1, curr- arr[idx]);
+
+    }
+    public int findTargetSumWays(int[] nums, int target) {
+        c=0;
+        help(nums, target, 0,0);
+        return c;
+    }
+}
+>>>>>>>>>>>>>>>>> By Recursion + Memo <<<<<<<<<<<<<<<<<<<
+class Solution {
+    int dp[][];
+    int off;
+    public int help(int arr[], int trg, int idx, int curr, int dp[][]){
+        if(idx == arr.length) {
+            if(curr == trg) return 1;
+            return 0;
+        }
+        if(dp[idx][curr + off] != Integer.MIN_VALUE) return dp[idx][curr+off];
+        int p = help(arr, trg, idx+1, curr+arr[idx], dp);
+        int m = help(arr, trg, idx+1, curr- arr[idx], dp);
+        return dp[idx][curr + off] = p+m;
+    }
+    public int findTargetSumWays(int[] nums, int target) {
+        int sum=0;
+        for(int n : nums){
+            sum += n;
+        }
+        if(Math.abs(target) > sum ) return 0;
+        off = sum;
+        dp = new int[nums.length][2*sum+1];
+        for(int i=0; i<dp.length; i++){
+            for(int j=0; j<dp[0].length; j++){
+                dp[i][j] =Integer.MIN_VALUE;
+            }
+        }
+        return help(nums, target, 0,0,dp);
+        
+    }
+}
