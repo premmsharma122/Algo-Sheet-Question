@@ -1,0 +1,27 @@
+class Solution {
+   
+    public int help(int arr[], int trg, int idx, int dp[][]){
+      if(trg == 0) {
+        return 0;
+      }
+      if(trg < 0 || idx == arr.length) return Integer.MAX_VALUE;
+      if(dp[idx][trg] != -1) return dp[idx][trg];
+
+      int ans1 = help(arr,trg-arr[idx], idx,dp);
+
+      if(ans1 != Integer.MAX_VALUE) ans1+=1;
+
+      int ans2 = help(arr,trg,idx+1,dp);
+      return dp[idx][trg] = Math.min(ans1, ans2);
+    }
+    public int coinChange(int[] coins, int amount) {
+        
+        if(amount==0) return 0;
+        int dp[][] = new int[coins.length+1][amount+1];
+        for(int i=0; i<dp.length; i++){
+            Arrays.fill(dp[i],-1);
+        }
+        int res =  help(coins,amount,0,dp);
+        return res==Integer.MAX_VALUE ? -1 : res;
+    }
+}
