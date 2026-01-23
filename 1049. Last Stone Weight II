@@ -2,7 +2,7 @@ class Solution {
     public int help(int arr[], int idx, int curr, int total, int dp[][]){
         if(idx == arr.length) {
             int s2 = total - curr;
-            return Math.abs(curr-s2);
+            return Math.abs(curr-s2); 
         } 
         if(dp[idx][curr] != -1) return dp[idx][curr];
         int ans1 = help(arr, idx+1, curr+arr[idx], total,dp);
