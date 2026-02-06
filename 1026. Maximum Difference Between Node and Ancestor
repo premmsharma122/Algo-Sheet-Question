@@ -5,7 +5,7 @@ class Solution {
         maxDiff = Math.max(maxDiff, Math.abs(r.val - mx));
         maxDiff = Math.max(maxDiff, Math.abs(r.val - min));
 
-        //update values
+        
         mx = Math.max(mx, r.val);
         min = Math.min(min, r.val);
         diffM(r.left, mx, min);
