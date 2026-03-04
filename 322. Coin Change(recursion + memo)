@@ -5,7 +5,7 @@ class Solution {
         return 0;
       }
       if(trg < 0 || idx == arr.length) return Integer.MAX_VALUE;
-      if(dp[idx][trg] != -1) return dp[idx][trg];
+      if(dp[idx][trg] != -1) return dp[idx][trg]; 
 
       int ans1 = help(arr,trg-arr[idx], idx,dp);
 
