@@ -11,7 +11,7 @@ class Solution {
         diffM(r.left, mx, min);
         diffM(r.right, mx, min);
     }
-    public int maxAncestorDiff(TreeNode root) {
+    public int maxAncestorDiff(TreeNode root) { 
         maxDiff = 0;
         diffM(root, root.val, root.val);
         return maxDiff;
